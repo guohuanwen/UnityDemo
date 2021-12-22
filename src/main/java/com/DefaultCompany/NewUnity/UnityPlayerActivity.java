@@ -3,6 +3,7 @@ package com.DefaultCompany.NewUnity;
 import com.unity3d.player.*;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
@@ -10,12 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class UnityPlayerActivity extends Activity {
     private String TAG = "UnityPlayerActivity";
@@ -52,9 +55,28 @@ public class UnityPlayerActivity extends Activity {
 
         try {
             Class<?> unityClass = Class.forName("com.unity3d.player.UnityPlayer");
-            final Field field = unityClass.getDeclaredField("t");
-            field.setAccessible(true);
-            field.set(mUnityPlayer, this);
+            final Field contextField = unityClass.getDeclaredField("t");
+            contextField.setAccessible(true);
+            contextField.set(mUnityPlayer, this);
+//
+//            //this.u = this.c();
+//            final Field surfaceField = unityClass.getDeclaredField("u");
+//            surfaceField.setAccessible(true);
+//            Method getSurfaceMethod = unityClass.getDeclaredMethod("c");
+//            getSurfaceMethod.setAccessible(true);
+//            Object surface = getSurfaceMethod.invoke(mUnityPlayer);
+//            surfaceField.set(mUnityPlayer, surface);
+//
+//            //this.u.setContentDescription(a(var1));
+//            Method getStringMethod = unityClass.getDeclaredMethod("a", Context.class);
+//            getStringMethod.setAccessible(true);
+//            String unityContext = (String) getStringMethod.invoke(mUnityPlayer, this);
+//            SurfaceView surfaceView = (SurfaceView)surfaceField.get(mUnityPlayer);
+//            surfaceView.setContentDescription(unityContext);
+//
+//            //this.addView(this.u);
+//            mUnityPlayer.removeAllViews();
+//            mUnityPlayer.addView((View) surfaceField.get(mUnityPlayer));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,6 +93,19 @@ public class UnityPlayerActivity extends Activity {
         // replace the intent with the one caught here.
         setIntent(intent);
         mUnityPlayer.newIntent(intent);
+    }
+
+    @Override
+    public void finish() {
+        try {
+            Class<?> unityClass = Class.forName("com.unity3d.player.UnityPlayer");
+            final Field contextField = unityClass.getDeclaredField("t");
+            contextField.setAccessible(true);
+            contextField.set(mUnityPlayer, WPApplication.getApplication());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.finish();
     }
 
     // Quit Unity
