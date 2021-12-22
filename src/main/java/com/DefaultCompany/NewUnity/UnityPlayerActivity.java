@@ -11,12 +11,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 public class UnityPlayerActivity extends Activity {
     private String TAG = "UnityPlayerActivity";
-    protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+    protected static UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
 
     // Override this in your custom UnityPlayerActivity to tweak the command line arguments passed to the Unity Android Player
     // The command line arguments are passed as a string, separated by spaces
@@ -38,7 +39,14 @@ public class UnityPlayerActivity extends Activity {
         String cmdLine = updateUnityCommandLineArguments(getIntent().getStringExtra("unity"));
         getIntent().putExtra("unity", cmdLine);
 
-        mUnityPlayer = new UnityPlayer(this);
+        if (mUnityPlayer == null) {
+            mUnityPlayer = new UnityPlayer(WPApplication.getApplication());
+        } else {
+            if (mUnityPlayer.getParent() != null) {
+                ViewGroup viewGroup = (ViewGroup) mUnityPlayer.getParent();
+                viewGroup.removeView(mUnityPlayer);
+            }
+        }
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
     }
