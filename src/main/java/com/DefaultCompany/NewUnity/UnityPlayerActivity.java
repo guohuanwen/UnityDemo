@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.lang.reflect.Field;
+
 public class UnityPlayerActivity extends Activity {
     private String TAG = "UnityPlayerActivity";
     protected static UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
@@ -47,6 +49,16 @@ public class UnityPlayerActivity extends Activity {
                 viewGroup.removeView(mUnityPlayer);
             }
         }
+
+        try {
+            Class<?> unityClass = Class.forName("com.unity3d.player.UnityPlayer");
+            final Field field = unityClass.getDeclaredField("t");
+            field.setAccessible(true);
+            field.set(mUnityPlayer, this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
     }
