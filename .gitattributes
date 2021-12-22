@@ -1,0 +1,3 @@
+*.bat text eol=crlf
+MANIFEST.MF text eol=crlf
+*.svg text eol=crlf
