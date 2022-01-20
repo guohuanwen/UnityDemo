@@ -58,25 +58,6 @@ public class UnityPlayerActivity extends Activity {
             final Field contextField = unityClass.getDeclaredField("t");
             contextField.setAccessible(true);
             contextField.set(mUnityPlayer, this);
-//
-//            //this.u = this.c();
-//            final Field surfaceField = unityClass.getDeclaredField("u");
-//            surfaceField.setAccessible(true);
-//            Method getSurfaceMethod = unityClass.getDeclaredMethod("c");
-//            getSurfaceMethod.setAccessible(true);
-//            Object surface = getSurfaceMethod.invoke(mUnityPlayer);
-//            surfaceField.set(mUnityPlayer, surface);
-//
-//            //this.u.setContentDescription(a(var1));
-//            Method getStringMethod = unityClass.getDeclaredMethod("a", Context.class);
-//            getStringMethod.setAccessible(true);
-//            String unityContext = (String) getStringMethod.invoke(mUnityPlayer, this);
-//            SurfaceView surfaceView = (SurfaceView)surfaceField.get(mUnityPlayer);
-//            surfaceView.setContentDescription(unityContext);
-//
-//            //this.addView(this.u);
-//            mUnityPlayer.removeAllViews();
-//            mUnityPlayer.addView((View) surfaceField.get(mUnityPlayer));
         } catch (Exception e) {
             e.printStackTrace();
         }
